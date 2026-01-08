@@ -21,6 +21,11 @@ export const getUserById = async (id: string) => {
 
 // TS specific allows you to update a partial component in the user i.e. email
 export const updateUser = async (id: string, data: Partial<NewUser>) => {
+  const existingUser = await getUserById(id)
+  if (!existingUser) {
+    throw new Error(`User with ${id} not found`)
+  }
+
   const [user] = await db
     .update(users)
     .set(data)
@@ -31,10 +36,16 @@ export const updateUser = async (id: string, data: Partial<NewUser>) => {
 
 // Upsert => create or update
 export const upsertUser = async (data: NewUser) => {
-  const existingUser = await getUserById(data.id);
-  if (existingUser) return updateUser(data.id, data);
+  const [user] = await db
+    .insert(users)
+    .values(data)
+    .onConflictDoUpdate({
+      target: users.id,
+      set: data,
+    })
+    .returning()
 
-  return createUser(data);
+    return user
 };
 
 // Product queries Product queries Product queries Product queries Product queries Product queries
@@ -73,6 +84,11 @@ export const getProductsByUserId = async (userId: string) => {
 };
 
 export const updateProduct = async (id: string, data: Partial<newProduct>) => {
+  const existingProduct  = await getPrductById(id)
+  if (!existingProduct) {
+    throw new Error(`Product with ${id} not found`)
+  }
+
   const [product] = await db
     .update(products)
     .set(data)
@@ -83,6 +99,11 @@ export const updateProduct = async (id: string, data: Partial<newProduct>) => {
 };
 
 export const deleteProduct = async (id: string) => {
+  const existingProduct = await getProductsByUserId(id)
+  if (!existingProduct) {
+    throw new Error(`Product with ${id} not found`)
+  }
+
   const [product] = await db
     .delete(products)
     .where(eq(products.id, id))
@@ -99,6 +120,11 @@ export const createComment = async (data: NewComment) => {
 };
 
 export const deleteComment = async (id: string) => {
+  const existingComment = await getCommentById(id)
+  if (!existingComment) {
+    throw new Error(`Comment with ${id} nt found`)
+  }
+
   const [comment] = await db
     .delete(comments)
     .where(eq(comments.id, id))
@@ -113,3 +139,4 @@ export const getCommentById = async (id: string) {
     with: { user: true }
   })
 }
+ 
