@@ -7,10 +7,6 @@ import { User } from "./db/schema"
 
 const app = express()
 
-const user:User = {
-
-}
-
 
 app.use(cors({ origin: ENV.FRONTEND_URL })) // Cross origin resorce sharing
 app.use(clerkMiddleware()) // Auth obj will be attached to he req
