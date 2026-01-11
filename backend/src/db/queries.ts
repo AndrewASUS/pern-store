@@ -62,7 +62,7 @@ export const getAllProducts = async () => {
   });
 };
 
-export const getPrductById = async (id: string) => {
+export const getProductById = async (id: string) => {
   return db.query.products.findFirst({
     where: eq(products.id, id),
     with: {
@@ -84,7 +84,7 @@ export const getProductsByUserId = async (userId: string) => {
 };
 
 export const updateProduct = async (id: string, data: Partial<newProduct>) => {
-  const existingProduct  = await getPrductById(id)
+  const existingProduct  = await getProductById(id)
   if (!existingProduct) {
     throw new Error(`Product with ${id} not found`)
   }
@@ -133,7 +133,7 @@ export const deleteComment = async (id: string) => {
   return comment;
 };
 
-export const getCommentById = async (id: string) {
+export const getCommentById = async (id: string) => {
   return db.query.comments.findFirst({
     where: eq(comments.id, id),
     with: { user: true }
