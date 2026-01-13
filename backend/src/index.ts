@@ -10,9 +10,9 @@ import commentRoutes from "./routes/commentRoutes"
 const app = express()
 
 
-app.use(cors({ origin: ENV.FRONTEND_URL })) // Cross origin resorce sharing
+app.use(cors({ origin: ENV.FRONTEND_URL, credentials: true })) // Cross origin resorce sharing. credentials: true allows frontend to send cookies to the backend
 app.use(clerkMiddleware()) // Auth obj will be attached to he req
-app.use(express.json) // Parses JSON request bodies
+app.use(express.json()) // Parses JSON request bodies
 app.use(express.urlencoded({ extended: true })) // Parses from data (like HTML forms)
 
 
