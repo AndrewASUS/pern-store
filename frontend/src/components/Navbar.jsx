@@ -7,7 +7,7 @@ import ThemeSelector from "./ThemeSelector"
 
 function Navbar() {
   
-  const { isSignedId } = useAuth()
+  const { isSignedIn } = useAuth()
 
   return (
     <div className="navbar bg-base-300">
@@ -22,7 +22,7 @@ function Navbar() {
 
       <div className="flex gap-2 items-center">
         <ThemeSelector />
-        {isSignedId ? (
+        {isSignedIn ? (
           <>
             <Link to="/create" className="btn btn-primary btn-sm gap-1">
               <PlusIcon className="size-4"/>
