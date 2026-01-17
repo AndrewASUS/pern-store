@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import { ENV } from "./config/env"
 import { clerkMiddleware } from '@clerk/express'
+import path from "path"
 
 import userRoutes from "./routes/userRoutes"
 import productRoutes from "./routes/productRoutes"
@@ -16,7 +17,7 @@ app.use(express.json()) // Parses JSON request bodies
 app.use(express.urlencoded({ extended: true })) // Parses from data (like HTML forms)
 
 
-app.get("/", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.json({
     message: "PERN-STORE API - Powered by PostgresSQL, Drizzle ORM & Clerk Auth",
     endpoints: {
@@ -32,6 +33,18 @@ app.get("/", (req, res) => {
 app.use("/api/users", userRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/comments", commentRoutes)
+
+if (ENV.NODE_ENV === "production") {
+  const __dirname = path.resolve()
+
+  // Server static files from frontend/dist
+  app.use(express.static(path.join(__dirname, "../frontend/dist")))
+
+  // Handle SPA (single page application) routing - send all non-API routes to index.html - react app
+  app.get("/{*any}", (req, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"))
+  })
+}
 
 
 app.listen(ENV.PORT, () => console.log("Server is running on PORT:", ENV.PORT))
