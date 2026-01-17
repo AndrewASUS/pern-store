@@ -9,7 +9,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
     const products = await queries.getAllProducts();
     res.status(200).json(products);
   } catch (error) {
-    console.log("Error gettng products:", error);
+    console.log("Error getting products:", error);
     res.status(500).json({ error: "Failed to get products" });
   }
 };
@@ -23,7 +23,7 @@ export const getMyProducts = async (req: Request, res: Response) => {
     const products = await queries.getProductsByUserId(userId);
     res.status(200).json(products);
   } catch (error) {
-    console.error("Error getting user poducts:", error);
+    console.error("Error getting user products:", error);
     res.status(500).json({ error: "Failed to get user products" });
   }
 };
@@ -54,7 +54,7 @@ export const createProduct = async (req: Request, res: Response) => {
     if (!title || !description || !imageUrl) {
       res
         .status(400)
-        .json({ error: "Ttile, description, and imageUrl are required" });
+        .json({ error: "Title, description, and imageUrl are required" });
       return;
     }
 
